@@ -1,4 +1,7 @@
+import 'package:aqueduct/managed_auth.dart';
 import 'package:first_aqueduct/controller/hero_controller.dart';
+import 'package:first_aqueduct/controller/register_controller.dart';
+import 'package:first_aqueduct/model/user.dart';
 
 import 'first_aqueduct.dart';
 
@@ -8,6 +11,8 @@ import 'first_aqueduct.dart';
 /// database connections. See http://aqueduct.io/docs/http/channel/.
 class FirstAqueductChannel extends ApplicationChannel {
   ManagedContext context;
+
+  AuthServer authServer;
 
   /// Initialize services in this method.
   ///
@@ -31,6 +36,9 @@ class FirstAqueductChannel extends ApplicationChannel {
     );
 
     context = ManagedContext(dataModel, persistentStore);
+
+    final authStorage = ManagedAuthDelegate<User>(context);
+    authServer = AuthServer(authStorage);
   }
 
   /// Construct the request channel.
@@ -50,7 +58,7 @@ class FirstAqueductChannel extends ApplicationChannel {
     });
 
     router.route('/heroes/[:id]').link(() => HerosController(context));
-
+    router.route('/register').link(()=>RegisterController(context, authServer));
     return router;
   }
 }
