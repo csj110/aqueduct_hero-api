@@ -51,14 +51,16 @@ class FirstAqueductChannel extends ApplicationChannel {
   Controller get entryPoint {
     final router = Router();
 
-    // Prefer to use `link` instead of `linkFunction`.
-    // See: https://aqueduct.io/docs/http/request_controller/
-    router.route("/example").linkFunction((request) async {
-      return Response.ok({"key": "value"});
-    });
+    router.route('/auth/token').link(() => AuthController(authServer));
 
-    router.route('/heroes/[:id]').link(() => HerosController(context));
-    router.route('/register').link(()=>RegisterController(context, authServer));
+    router
+        .route('/heroes/[:id]')
+        .link(() => Authorizer.bearer(authServer))
+        .link(() => HerosController(context));
+        
+    router
+        .route('/register')
+        .link(() => RegisterController(context, authServer));
     return router;
   }
 }

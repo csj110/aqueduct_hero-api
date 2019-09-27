@@ -1,0 +1,22 @@
+POST http://localhost:8888/auth/token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+Authorization: Basic Y29tLmhlcm9lcy50dXRvcmlhbDo=
+
+username=bob&password=password&grant_type=password
+
+
+###
+POST http://localhost:8888/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "username":"bob",
+  "password":"password"
+}
+
+nEBO7uYrExp5ieIDBSdxKLK9Olh7HANJ
+
+###
+GET http://localhost:8888/heroes HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer okkdanQUXcUTT8FOHUPjDgWvg6MSyJcF
